@@ -633,19 +633,19 @@ func main() {
 			if err != nil {
 				tx.Rollback()
 				c.Echo().Logger.Debug("debug at handler", err)
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(1000 * time.Millisecond)
 				continue
 			}
 			reservationID, err = res.LastInsertId()
 			if err != nil {
 				tx.Rollback()
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(1000 * time.Millisecond)
 				// log.Println("re-try: rollback by", err)
 				continue
 			}
 			if err := tx.Commit(); err != nil {
 				tx.Rollback()
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(1000 * time.Millisecond)
 				continue
 			}
 
