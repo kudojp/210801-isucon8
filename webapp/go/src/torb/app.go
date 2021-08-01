@@ -345,6 +345,7 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Debug = true
 	funcs := template.FuncMap{
 		"encode_json": func(v interface{}) string {
 			b, _ := json.Marshal(v)
@@ -625,18 +626,21 @@ func main() {
 			res, err := tx.Exec("INSERT INTO reservations (event_id, sheet_id, user_id, reserved_at) VALUES (?, ?, ?, ?)", event.ID, sheet.ID, user.ID, time.Now().UTC().Format("2006-01-02 15:04:05.000000"))
 			if err != nil {
 				tx.Rollback()
-				log.Println("re-try: rollback by", err)
+				c.Echo().Logger.Debug("debug at handler", err)
+				// log.Println("re-try: rollback by", err)
 				continue
 			}
 			reservationID, err = res.LastInsertId()
 			if err != nil {
 				tx.Rollback()
-				log.Println("re-try: rollback by", err)
+				c.Echo().Logger.Debug("debug at handler", err)
+				// log.Println("re-try: rollback by", err)
 				continue
 			}
 			if err := tx.Commit(); err != nil {
 				tx.Rollback()
-				log.Println("re-try: rollback by", err)
+				c.Echo().Logger.Debug("debug at handler", err)
+				// log.Println("re-try: rollback by", err)
 				continue
 			}
 
