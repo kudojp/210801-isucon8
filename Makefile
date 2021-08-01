@@ -2,7 +2,7 @@
 
 APP_DIR := todo
 
-NGINX_LOG := /var/log/nginx/access.log
+NGINX_LOG := /var/log/h2o/access.log
 MYSQL_SLOW_LOG := /var/log/mariadb/slow.log
 
 MYSQL_CONFIG := /etc/mysql/my.cnf
@@ -30,7 +30,7 @@ log_reset: ## logファイルを初期化する
 
 .PHONY: alp
 alp: ## alpのログを見る
-	@sudo cat $(NGINX_LOG) | alp ltsv --sort avg -r --format md -m "" --filters ""
+	@sudo cat $(NGINX_LOG) | alp json --sort avg -r --format md -m "/api/users/[0-9]+,/api/events/[0-9]+/sheets/[S|A|B|C|D]/[0-9]+/reservation,/admin/api/reports/events/[0-9]+/sales,/api/events/[0-9]+/actions/reserve,/admin/api/events/[0-9]+,/api/events/[0-9]+"
 
 .PHONY: slow
 slow: ## スロークエリを見る
@@ -62,16 +62,16 @@ pprof:
 
 .PHONY: application_build
 application_build: ## application build (wip)
-	@echo "Please implement!!"
+	cd /home/isucon/torb/webapp/go; make
 
 .PHONY: application_restart
 application_restart: ## application restart (wip)
-	@echo "Please implement!!"
+	sudo systemctl restart torb.go
 
 .PHONY: middleware_restart
 middleware_restart: ## mysqlとnginxのrestart
-	sudo systemctl restart mysql
-	# sudo systemctl restart nginx
+	sudo systemctl restart mariadb
+	sudo systemctl restart h2o
 
 .PHONY: restart
 restart: application_restart middleware_restart ## application, mysql, nginxのリスタート
