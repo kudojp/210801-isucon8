@@ -345,6 +345,12 @@ func main() {
 	}
 
 	e := echo.New()
+	logger := middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: logFormat(),
+		Output: os.Stdout,
+	})
+	e.Use(logger)
+	e.Use(middleware.Recover())
 	e.Debug = true
 	funcs := template.FuncMap{
 		"encode_json": func(v interface{}) string {
