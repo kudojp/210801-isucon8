@@ -2,7 +2,7 @@
 
 APP_DIR := todo
 
-NGINX_LOG := /var/log/nginx/access.log
+NGINX_LOG := /var/log/h2o/access.log
 MYSQL_SLOW_LOG := /var/log/mariadb/slow.log
 
 MYSQL_CONFIG := /etc/mysql/my.cnf
@@ -62,16 +62,16 @@ pprof:
 
 .PHONY: application_build
 application_build: ## application build (wip)
-	@echo "Please implement!!"
+	cd /home/isucon/torb/webapp/go; make
 
 .PHONY: application_restart
 application_restart: ## application restart (wip)
-	@echo "Please implement!!"
+	sudo systemctl restart torb.go
 
 .PHONY: middleware_restart
 middleware_restart: ## mysqlとnginxのrestart
-	sudo systemctl restart mysql
-	# sudo systemctl restart nginx
+	sudo systemctl restart mariadb
+	sudo systemctl restart h2o
 
 .PHONY: restart
 restart: application_restart middleware_restart ## application, mysql, nginxのリスタート
