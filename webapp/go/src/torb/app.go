@@ -436,11 +436,12 @@ func main() {
 			return err
 		}
 
-		loginUser, err := getLoginUser(c)
 		if err != nil {
 			return err
 		}
-		if user.ID != loginUser.ID {
+
+		loginUserID := sessUserID(c)
+		if user.ID != loginUserID {
 			return resError(c, "forbidden", 403)
 		}
 
