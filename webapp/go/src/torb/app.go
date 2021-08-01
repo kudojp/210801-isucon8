@@ -444,7 +444,6 @@ func main() {
 		if user.ID != loginUserID {
 			return resError(c, "forbidden", 403)
 		}
-		userID := sessUserID(c)
 
 		rows, err := db.Query("SELECT r.*, s.rank AS sheet_rank, s.num AS sheet_num FROM reservations r INNER JOIN sheets s ON s.id = r.sheet_id WHERE r.user_id = ? ORDER BY IFNULL(r.canceled_at, r.reserved_at) DESC LIMIT 5", user.ID)
 		if err != nil {
